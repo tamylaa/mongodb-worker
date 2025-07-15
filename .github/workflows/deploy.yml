@@ -32,13 +32,24 @@ jobs:
         run: npm install
 
       - name: Build project
-        run: npm run build
+        run: |
+          # Ensure all dependencies are installed
+          npm install
+          # Build with proper ESM configuration
+          esbuild api/server.js --bundle --platform=node --target=node18 --outdir=dist --format=esm
         if: ${{ github.event_name == 'push' }}
 
       - name: Check build output
         run: |
           if [ ! -f "dist/index.js" ]; then
             echo "Build output not found"
+            exit 1
+          fi
+
+      - name: Verify ESM build
+        run: |
+          if ! grep -q 'export' dist/index.js; then
+            echo "Build output is not in ESM format"
             exit 1
           fi
 
