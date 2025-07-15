@@ -46,7 +46,7 @@ jobs:
           fi
 
       - name: Deploy with Cloudflare Wrangler
-        uses: cloudflare/wrangler-action@v3.90.0
+        uses: cloudflare/wrangler-action@v3.0
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -58,7 +58,7 @@ jobs:
 
       - name: Deploy preview on pull request
         if: ${{ github.event_name == 'pull_request' }}
-        uses: cloudflare/wrangler-action@v3.90.0
+        uses: cloudflare/wrangler-action@v3.0
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
