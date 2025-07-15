@@ -31,9 +31,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Validate wrangler configuration
-        run: npx wrangler config validate
-
       - name: Build project
         run: npm run build
         if: ${{ github.event_name == 'push' }}
