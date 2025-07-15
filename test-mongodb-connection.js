@@ -1,8 +1,8 @@
 const { MongoClient } = require('mongodb');
+require('dotenv').config();
 
 async function testConnection() {
-  const uri = "mongodb+srv://tamyla_auth_master:Tamyla01May2025@tamylaauth.lqbn0xw.mongodb.net/tamyla-auth?retryWrites=true&w=majority&appName=tamylaauth";
-  
+  const uri = process.env.MONGODB_URI;
   const client = new MongoClient(uri);
   
   try {
