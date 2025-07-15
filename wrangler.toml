@@ -1,0 +1,9 @@
+name = "mongodb-worker"
+main = "api/server.js"
+compatibility_date = "2023-07-14"
+
+[env.production]
+name = "mongodb-worker-prod"
+
+[env.staging]
+name = "mongodb-worker-staging"
