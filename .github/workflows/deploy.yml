@@ -28,10 +28,9 @@ jobs:
         if: ${{ github.event_name == 'push' }}
 
       - name: Deploy with Cloudflare Wrangler
-        uses: cloudflare/wrangler-action@1.8.0
+        uses: cloudflare/wrangler-action@v2
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           name: mongodb-worker
           env: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
-          command: deploy
