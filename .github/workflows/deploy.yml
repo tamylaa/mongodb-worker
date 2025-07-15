@@ -28,7 +28,7 @@ jobs:
         if: ${{ github.event_name == 'push' }}
 
       - name: Deploy with Cloudflare Wrangler
-        uses: cloudflare/wrangler-action@v2
+        uses: cloudflare/wrangler-action@v3.90.0
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
