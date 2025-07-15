@@ -31,6 +31,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Install esbuild globally
+        run: npm install -g esbuild
+
       - name: Build project
         run: |
           # Ensure all dependencies are installed
