@@ -1,5 +1,6 @@
-const axios = require('axios');
-require('dotenv').config();
+import axios from 'axios';
+import dotenv from 'dotenv';
+dotenv.config();
 
 // Configuration
 const MONGODB_WORKER_URL = process.env.MONGODB_WORKER_URL || 'http://localhost:3002';
@@ -13,7 +14,7 @@ const TEST_USER = {
 };
 
 // Axios instance with default config
-const api = axios.create({
+export const api = axios.create({
   baseURL: MONGODB_WORKER_URL,
   headers: {
     'Content-Type': 'application/json',
@@ -22,7 +23,7 @@ const api = axios.create({
 });
 
 // Test runner
-async function runTests() {
+export async function runTests() {
   try {
     console.log('🚀 Starting MongoDB Worker Tests...');
     console.log(`🔗 Testing against: ${MONGODB_WORKER_URL}`);
@@ -56,14 +57,14 @@ async function runTests() {
 }
 
 // 1. Test Health Check
-async function testHealthCheck() {
+export async function testHealthCheck() {
   const response = await api.get('/health');
   console.log('  ✅ Health Check:', response.data);
   return response.data;
 }
 
 // 2. Test User Operations
-async function testUserOperations() {
+export async function testUserOperations() {
   const createResponse = await api.post('/api/users', {
     email: TEST_USER.email,
     name: TEST_USER.name
@@ -75,7 +76,7 @@ async function testUserOperations() {
   return userId;
 }
 
-async function testMagicLinkOperations(userId) {
+export async function testMagicLinkOperations(userId) {
   const response = await api.post(`/api/users/${userId}/magic-links`, {
     userId,
     email: TEST_USER.email,
@@ -91,7 +92,7 @@ async function testMagicLinkOperations(userId) {
   };
 }
 
-async function testMagicLinkVerification(token) {
+export async function testMagicLinkVerification(token) {
   const response = await api.get(`/api/magic-links/verify?token=${token}`);
   console.log('  ✅ Magic link verified:', {
     userId: response.data.data.userId,

@@ -1,13 +1,13 @@
-require('dotenv').config();
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const morgan = require('morgan');
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
-const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/users');
-const magicLinkRoutes = require('./routes/magicLinks');
+import 'dotenv/config';
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import morgan from 'morgan';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import authRoutes from './routes/auth.js';
+import userRoutes from './routes/users.js';
+import magicLinkRoutes from './routes/magicLinks.js';
 
 // Initialize Express app
 const app = express();
@@ -101,4 +101,4 @@ process.on('unhandledRejection', (err) => {
   server.close(() => process.exit(1));
 });
 
-module.exports = { app, server };
+export { app, server };

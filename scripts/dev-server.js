@@ -1,7 +1,4 @@
 import dotenv from 'dotenv';
-import { startServer } from '../api/server.js';
+import '../api/server.js';
 
-dotenv.config();
-
-// Start the server
-startServer();
+// The server starts automatically when imported, no need to call anything

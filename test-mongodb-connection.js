@@ -1,7 +1,8 @@
-const { MongoClient } = require('mongodb');
-require('dotenv').config();
+import { MongoClient } from 'mongodb';
+import dotenv from 'dotenv';
+dotenv.config();
 
-async function testConnection() {
+export async function testConnection() {
   const uri = process.env.MONGODB_URI;
   const client = new MongoClient(uri);
   
@@ -23,4 +24,4 @@ async function testConnection() {
   }
 }
 
-testConnection();
+export default testConnection;

@@ -1,10 +1,10 @@
-const User = require('../../models/User');
-const { v4: uuidv4 } = require('uuid');
+import { User } from '../../models/User.js';
+import { v4 as uuidv4 } from 'uuid';
 
 // @desc    Create magic link
 // @route   POST /api/users/:userId/magic-links
 // @access  Public
-exports.createMagicLink = async (req, res) => {
+export const createMagicLink = async (req, res) => {
   try {
     const { userId } = req.params;
     const { email, name } = req.body;
@@ -60,7 +60,7 @@ exports.createMagicLink = async (req, res) => {
 // @route   GET /api/magic-links/:token
 // @access  Public
 
-exports.verifyMagicLink = async (req, res) => {
+export const verifyMagicLink = async (req, res) => {
   try {
     const { token } = req.query; // Changed from req.params to req.query
     const user = await User.findOne({

@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const User = require('../../models/User');
-const { v4: uuidv4 } = require('uuid');
+import { User } from '../../models/User.js';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * @route   POST /auth/magic-link/request
@@ -103,4 +103,4 @@ router.get('/magic-link/verify', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

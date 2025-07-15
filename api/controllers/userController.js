@@ -1,4 +1,4 @@
-const User = require('../../models/User');
+import { User }  from '../../models/User.js';
 
 // @desc    Find user by ID
 // @route   GET /api/users/:id
@@ -110,10 +110,5 @@ async function updateUser(req, res) {
   }
 }
 
-// Export all functions
-module.exports = {
-  getUserById,
-  getUserByEmail,
-  createUser,
-  updateUser
-};
+// All functions are exported individually using export keyword
+export { getUserById, getUserByEmail, createUser, updateUser };
