@@ -47,14 +47,14 @@ jobs:
 
       - name: Check build output
         run: |
-          if [ ! -f "dist/index.js" ]; then
+          if [ ! -f "dist/server.js" ]; then
             echo "Build output not found"
             exit 1
           fi
 
       - name: Verify ESM build
         run: |
-          if ! grep -q 'export' dist/index.js; then
+          if ! grep -q 'export' dist/server.js; then
             echo "Build output is not in ESM format"
             exit 1
           fi
