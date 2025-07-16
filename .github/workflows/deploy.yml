@@ -34,14 +34,8 @@ jobs:
           npm install uuid@9.0.1
           npm install
 
-      - name: Convert to ESM
-        run: |
-          # Convert CommonJS to ESM
-          find api -type f -name "*.js" -exec sed -i 's/require(\"/import /g' {} \;
-          find api -type f -name "*.js" -exec sed -i 's/\"\)/ from \\"/g' {} \;
-          find api -type f -name "*.js" -exec sed -i 's/module.exports =/export default/g' {} \;
-          find api -type f -name "*.js" -exec sed -i 's/exports./export /g' {} \;
-          find api -type f -name "*.js" -exec sed -i 's/\)/ \\)/g' {} \;
+      - name: Install esbuild globally
+        run: npm install -g esbuild
 
       - name: Build project
         run: |
