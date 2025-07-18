@@ -1,9 +1,66 @@
-name = "mongodb-worker"
-main = "api/server.js"
-compatibility_date = "2023-07-14"
+name = "data-service"
+main = "src/worker/index.js"
+compatibility_date = "2023-07-17"
+compatibility_flags = ["nodejs_compat"]
 
+# Build configuration
+[build]
+command = ""  # No build command needed for this worker
+
+# Development server configuration
+[dev]
+port = 3002
+ip = "localhost"
+
+# Base environment variables (for development)
+[vars]
+NODE_ENV = "development"
+
+# Development D1 Database Binding
+[[d1_databases]]
+binding = "DB"
+database_name = "tamyla-auth-db"
+database_id = "373a1466-3086-4132-a4f6-a7b1a64a3a41"
+
+# Production environment
 [env.production]
-name = "mongodb-worker-prod"
+name = "data-service"
+workers_dev = true  # Use workers.dev for testing
 
+# Production D1 Database Binding
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "tamyla-auth-db"
+database_id = "373a1466-3086-4132-a4f6-a7b1a64a3a41"
+
+# Production environment variables
+[env.production.vars]
+NODE_ENV = "production"
+JWT_SECRET = "${JWT_SECRET}"  # Set via wrangler secret
+BASE_URL = "https://data-service.tamylatrading.workers.dev"
+MAGIC_LINK_EXPIRY_MINUTES = "15"
+
+# Staging environment (using workers.dev)
 [env.staging]
-name = "mongodb-worker-staging"
+name = "data-service-staging"
+workers_dev = true
+
+# Staging-specific environment variables
+[env.staging.vars]
+NODE_ENV = "staging"
+JWT_SECRET = "${JWT_SECRET}"  # Set via wrangler secret
+
+# Add any KV namespaces if needed
+# [[kv_namespaces]]
+# binding = "KV"
+# id = ""
+# preview_id = ""
+
+# Add cron triggers if needed
+# [[triggers]]
+# crons = ["0 * * * *"]  # Hourly tasks
+
+# Add any mTLS certificates if needed
+# [[mtls_certificates]]
+# binding = "CERT"
+# certificate_id = ""

@@ -38,7 +38,8 @@ userSchema.index({ 'magicLinks.token': 1 });
 
 // Method to add a magic link
 userSchema.methods.addMagicLink = function() {
-  const token = require('crypto').randomBytes(32).toString('hex');
+  const { generateRandomString } = require('../src/shared/utils/crypto.js');
+  const token = generateRandomString(64); // 64 chars = 256 bits of entropy
   const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
   
   this.magicLinks.push({

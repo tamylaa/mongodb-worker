@@ -1,0 +1,38 @@
+name = "tamyla-auth-worker"
+main = "src/worker/index.js"
+compatibility_date = "2023-07-14"
+node_compat = true
+
+# Enable modules format
+format = "modules"
+
+# Add environment variables
+[build]
+command = "npm run build"
+
+[dev]
+port = 3002  # Port for local development
+
+[env.production]
+name = "tamyla-auth-worker-prod"
+route = "api.tamyla.com/*"
+
+[env.staging]
+name = "tamyla-auth-worker-staging"
+workers_dev = true  # Use workers.dev subdomain for staging
+
+# D1 Database Binding
+[[d1_databases]]
+binding = "DB"
+database_name = "tamyla-auth-db"
+database_id = "373a1466-3086-4132-a4f6-a7b1a64a3a41"
+
+# Environment variables
+[vars]
+NODE_ENV = "production"
+JWT_SECRET = "${JWT_SECRET}"  # Should be set in environment variables
+MAGIC_LINK_EXPIRY_MINUTES = "15"
+
+# Add triggers for cron jobs (if needed)
+# [[triggers]]
+# crons = ["0 * * * *", "0 0 * * *"]

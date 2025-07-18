@@ -1,6 +1,12 @@
-import axios from 'axios';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import dotenv from 'dotenv';
-dotenv.config();
+import path from 'path';
+import fetch from 'node-fetch';
+
+// Configure dotenv
+const __dirname = dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 // Configuration
 const MONGODB_WORKER_URL = process.env.MONGODB_WORKER_URL || 'http://localhost:3002';
@@ -13,14 +19,36 @@ const TEST_USER = {
   password: 'testpassword123'
 };
 
-// Axios instance with default config
-export const api = axios.create({
-  baseURL: MONGODB_WORKER_URL,
-  headers: {
+// API request helper
+async function apiRequest(endpoint, options = {}) {
+  const url = new URL(endpoint, MONGODB_WORKER_URL).toString();
+  const headers = {
     'Content-Type': 'application/json',
-    'Authorization': `Bearer ${API_KEY}`
+    'Authorization': `Bearer ${API_KEY}`,
+    ...options.headers
+  };
+
+  const config = {
+    ...options,
+    headers
+  };
+
+  if (options.body) {
+    config.body = JSON.stringify(options.body);
   }
-});
+
+  const response = await fetch(url, config);
+  const data = await response.json();
+
+  if (!response.ok) {
+    const error = new Error(data.message || 'API request failed');
+    error.response = response;
+    error.data = data;
+    throw error;
+  }
+
+  return { data };
+}
 
 // Test runner
 export async function runTests() {
@@ -58,46 +86,61 @@ export async function runTests() {
 
 // 1. Test Health Check
 export async function testHealthCheck() {
-  const response = await api.get('/health');
+  const response = await apiRequest('/health', { method: 'GET' });
   console.log('  ✅ Health Check:', response.data);
   return response.data;
 }
 
 // 2. Test User Operations
 export async function testUserOperations() {
-  const createResponse = await api.post('/api/users', {
-    email: TEST_USER.email,
-    name: TEST_USER.name
+  const createResponse = await apiRequest('/api/users', {
+    method: 'POST',
+    body: {
+      email: TEST_USER.email,
+      name: TEST_USER.name
+    }
   });
   console.log('  ✅ User created:', createResponse.data);
-  const userId = createResponse.data.data._id;
-  const getResponse = await api.get(`/api/users/${userId}`);
+  const userId = createResponse.data._id;
+  
+  const getResponse = await apiRequest(`/api/users/${userId}`, {
+    method: 'GET'
+  });
   console.log('  ✅ User retrieved:', getResponse.data);
   return userId;
 }
 
 export async function testMagicLinkOperations(userId) {
-  const response = await api.post(`/api/users/${userId}/magic-links`, {
-    userId,
-    email: TEST_USER.email,
-    name: TEST_USER.name
+  const response = await apiRequest(`/api/users/${userId}/magic-links`, {
+    method: 'POST',
+    body: {
+      userId,
+      email: TEST_USER.email,
+      name: TEST_USER.name
+    }
   });
+  
   console.log('  ✅ Magic link created:', {
-    token: response.data.data.token.substring(0, 10) + '...',
-    expiresAt: response.data.data.expiresAt
+    token: response.data.token.substring(0, 10) + '...',
+    expiresAt: response.data.expiresAt
   });
+  
   return {
-    token: response.data.data.token,
-    expiresAt: response.data.data.expiresAt
+    token: response.data.token,
+    expiresAt: response.data.expiresAt
   };
 }
 
 export async function testMagicLinkVerification(token) {
-  const response = await api.get(`/api/magic-links/verify?token=${token}`);
-  console.log('  ✅ Magic link verified:', {
-    userId: response.data.data.userId,
-    email: response.data.data.email
+  const response = await apiRequest(`/api/magic-links/verify?token=${token}`, {
+    method: 'GET'
   });
+  
+  console.log('  ✅ Magic link verified:', {
+    userId: response.data.userId,
+    email: response.data.email
+  });
+  
   return response.data;
 }
 
